@@ -103,6 +103,10 @@ $(document).ready(function () {
 
   function initDialogPreview() {
     checkForNav();
+    $(".user").attr(
+      "href",
+      "https://unsplash.com/@" + clickedImage.user.username
+    );
     $(".user__img").attr("src", clickedImage.user.profile_image.small);
     $(".user__name").text(clickedImage.user.first_name);
     $(".download__textBtn").attr(
