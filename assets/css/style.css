@@ -1,0 +1,239 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  color: rgb(46, 46, 46);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+.hStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+.hStack li {
+  min-width: 140px;
+}
+.hStack li div:first-child {
+  margin-bottom: 5px;
+  color: rgb(95, 95, 95);
+}
+
+.vStack {
+  margin-top: 20px;
+}
+.vStack li {
+  padding-left: 25px;
+  background-size: 15px;
+  background-position: left bottom 1px;
+  background-repeat: no-repeat;
+  color: rgb(95, 95, 95);
+}
+.vStack li + li {
+  margin-top: 8px;
+}
+.vStack li.pDate {
+  background-image: url(../img/calendar.png);
+}
+.vStack li.location {
+  background-image: url(../img/location.png);
+}
+
+.gallery {
+  -moz-column-count: 3;
+       column-count: 3;
+  -moz-column-gap: 22px;
+       column-gap: 22px;
+  padding: 28px;
+}
+@media screen and (max-width: 1000px) {
+  .gallery {
+    -moz-column-count: 2;
+         column-count: 2;
+  }
+}
+@media screen and (max-width: 600px) {
+  .gallery {
+    -moz-column-count: 1;
+         column-count: 1;
+  }
+}
+.gallery__item {
+  position: relative;
+  margin-bottom: 22px;
+  cursor: zoom-in;
+}
+.gallery__item__img {
+  display: block;
+  width: 100%;
+}
+.gallery__item__bottom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 20px;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5607843137), transparent);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 150ms;
+}
+.gallery__item:hover .gallery__item__bottom {
+  opacity: 1;
+  visibility: visible;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 8px;
+}
+.user__img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.download__btn {
+  display: block;
+  width: 40px;
+  height: 32px;
+  background-color: #f3f3f3;
+  background-image: url(../img/arrow-down.png);
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+}
+.download__btn:hover {
+  background-color: #eeeeee;
+}
+.download__textBtn {
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 5px;
+  padding: 6px 35px 7px 15px;
+  line-height: 1;
+  background-image: url(../img/arrow-down.png);
+  background-size: 16px;
+  background-position: center right 8px;
+  background-repeat: no-repeat;
+}
+.download__textBtn:hover {
+  background-color: #eeeeee;
+}
+
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 16px 72px;
+  cursor: zoom-out;
+  overflow-y: auto;
+  display: none;
+}
+.dialog__close {
+  position: fixed;
+  top: 16px;
+  left: 15px;
+  width: 30px;
+  height: 30px;
+  background-image: url(../img/close.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 25px;
+  filter: invert(1);
+  cursor: pointer;
+}
+.dialog__navPrev, .dialog__navNext {
+  position: fixed;
+  top: calc(50% - 15px);
+  width: 30px;
+  height: 30px;
+  background-image: url(../img/prev.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  filter: invert(1);
+}
+.dialog__navPrev.disabled, .dialog__navNext.disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+.dialog__navPrev {
+  left: 15px;
+}
+.dialog__navNext {
+  right: 30px;
+  transform: rotate(180deg);
+}
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dialog__header .user {
+  color: black;
+}
+.dialog__inner {
+  background-color: white;
+  border-radius: 5px;
+  padding: 15px;
+  cursor: default;
+}
+.dialog__preview {
+  padding: 22px 0;
+  width: min(100%, 850px);
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.dialog__preview img {
+  width: 100%;
+  cursor: zoom-in;
+}
+.dialog__preview__zoom {
+  position: absolute;
+  top: 35px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  background-image: url(../img/zoom-in.png);
+  background-size: 15px;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: invert(1);
+  pointer-events: none;
+}
+.dialog__preview.full .dialog__preview__zoom {
+  background-image: url(../img/shrink.png);
+  background-size: 22px;
+}
+.dialog__preview.full {
+  width: calc(100% + 30px);
+  margin-left: -15px;
+}
+.dialog__preview.full img {
+  cursor: zoom-out;
+}/*# sourceMappingURL=style.css.map */
