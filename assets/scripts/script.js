@@ -1,7 +1,9 @@
 $(document).ready(function () {
-  var imageList = null;
+  var imageList = [];
   var clickedImage = null;
   var currentPreviewIndex = null;
+  var per_page = 28;
+  var page = 0;
   function formateDate(dateString) {
     var date = new Date(dateString);
     var formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -14,39 +16,52 @@ $(document).ready(function () {
   }
 
   $html = "";
-  $.ajax({
-    url: "https://api.unsplash.com/search/photos?query=landscape&per_page=24&client_id=oau70oGQxc-O7_ET2WOI7nAvfQCSImFkq4yXkORlq74",
-    success: function (res) {
-      imageList = res.results;
-      res.results.forEach((item) => {
-        $html += '<figure class="gallery__item" data-id="' + item.id + '">';
-        $html +=
-          '<img loading="lazy" class="gallery__item__img" src="' +
-          item.urls.small +
-          '" alt="' +
-          item.alt_description +
-          '">';
-        $html += '<div class="gallery__item__bottom">';
-        $html +=
-          '<a class="user" href="https://unsplash.com/@' +
-          item.user.username +
-          '" target="_blank">';
-        $html +=
-          '<img loading="lazy" class="user__img" src="' +
-          item.user.profile_image.small +
-          '">';
-        $html += "<figcaption>" + item.user.first_name + "</figcaption>";
-        $html += "</a>";
-        $html +=
-          '<a href="' +
-          item.links.download +
-          '&force=true" class="download__btn"></a>';
-        $html += "</div>";
-        $html += "</figure>";
-      });
-      $(".gallery").html($html);
-    },
-  });
+
+  function fetchImages() {
+    page++;
+    $.ajax({
+      url:
+        "https://api.unsplash.com/search/photos?query=landscape&per_page=" +
+        per_page +
+        "&page=" +
+        page,
+      headers: {
+        Authorization: "Client-ID oau70oGQxc-O7_ET2WOI7nAvfQCSImFkq4yXkORlq74",
+      },
+      success: function (res) {
+        imageList = [...imageList, ...res.results];
+        res.results.forEach((item) => {
+          $html += '<figure class="gallery__item" data-id="' + item.id + '">';
+          $html +=
+            '<img loading="lazy" class="gallery__item__img" src="' +
+            item.urls.small +
+            '" alt="' +
+            item.alt_description +
+            '">';
+          $html += '<div class="gallery__item__bottom">';
+          $html +=
+            '<a class="user" href="https://unsplash.com/@' +
+            item.user.username +
+            '" target="_blank">';
+          $html +=
+            '<img loading="lazy" class="user__img" src="' +
+            item.user.profile_image.small +
+            '">';
+          $html += "<figcaption>" + item.user.first_name + "</figcaption>";
+          $html += "</a>";
+          $html +=
+            '<a href="' +
+            item.links.download +
+            '&force=true" class="download__btn"></a>';
+          $html += "</div>";
+          $html += "</figure>";
+        });
+        $(".gallery").html($html);
+      },
+    });
+  }
+
+  fetchImages();
 
   $(document).on("click", ".gallery__item", function (e) {
     if (e.target.classList.contains("gallery__item__bottom")) {
@@ -133,4 +148,23 @@ $(document).ready(function () {
       $(".dialog__navNext").addClass("disabled");
     }
   }
+
+  function debounce(fn, delay) {
+    let timeoutId;
+    return function () {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        fn.apply(this, arguments);
+      }, delay);
+    };
+  }
+
+  window.addEventListener(
+    "scroll",
+    debounce(function () {
+      if ($(document).height() - $(this).height() - 100 < $(this).scrollTop()) {
+        fetchImages();
+      }
+    }, 800)
+  );
 });
